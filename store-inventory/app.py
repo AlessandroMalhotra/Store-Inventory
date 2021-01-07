@@ -64,12 +64,12 @@ def Menu():
 	while choice != 'q':
 		print("Enter 'q' to quit")
 
-	for key, value in menu.items():
-		print(f'{key}, {value.__doc__}.')
-	choice = input('Action: ').lower().strip()
+		for key, value in menu.items():
+			print(f'{key}, {value.__doc__}.')
+		choice = input('Action: ').lower().strip()
 
-	if choice in menu:
-		menu[choice]()
+		if choice in menu:
+			menu[choice]()
 
 
 def view_entries():
