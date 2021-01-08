@@ -97,7 +97,7 @@ def view_entries():
 		print('r) return to main menu')
 		print('q) quit')
 
-		next_action = input('Action: [nd] '.lower().strip())
+		next_action = input('Action: [nrd] '.lower().strip())
 		if next_action == 'r':
 			Menu()
 		elif next_action == 'q':
