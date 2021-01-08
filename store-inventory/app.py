@@ -115,11 +115,17 @@ def add_entries():
 	# product quantity = input the product quantity
 	# add this to our database .create() with add_data function
 	active = True
-
 	while active:
 		product_name = input('What is the name of your product?\n ')
 		product_price = input('What is the price of your prodcut?\n ')
 		product_quantity = input('What is the quantity of your product?\n ')
+
+        saved = input('Save entry? [Yn] ').lower()
+
+        if saved != 'n':
+            Product.create(product_name=product_name,
+            product_price=product_price,
+            product_quantity=product_quantity)
 
 
 
