@@ -105,28 +105,44 @@ def view_entries():
 			print('Thank you! goodbye.')
 
 
+def get_product_name():
+    new_product = input('What is the name of your product?\n ')
+    return new_product
+
+
+def get_product_price():
+    new_price = input('What is price of your product?\n ')
+    new_price = int(new_price.replace('$', '').replace('.', ''))
+    return new_price
+
+def get_product_quantity():
+    new_quantity = input('What is the quantity of your product?\n ')
+    return new_quantity
 
 def add_entries():
 	""" Add Entry """
-	# a new variable which will equal to none
-	# while loop to say while variable not equal q, print enter q to quit 
 	# product_name = input product name 
 	# product price = input product price show example of format, we need to change $2.99 to 299
 	# product quantity = input the product quantity
 	# add this to our database .create() with add_data function
-	active = True
-	while active:
-		product_name = input('What is the name of your product?\n ')
-		product_price = input('What is the price of your prodcut?\n ')
-		product_quantity = input('What is the quantity of your product?\n ')
+	    product_name = get_product_name()
+		product_price = get_product_price()
+		product_quantity = get_product_quantity()
 
         saved = input('Save entry? [Yn] ').lower()
 
         if saved != 'n':
-            Product.create(product_name=product_name,
-            product_price=product_price,
-            product_quantity=product_quantity)
-            print('Saved Successfully!')
+            try:
+                Product.create(product_name = product_name,
+                product_price = product_price,
+                product_quantity = product_quantity)
+                print('Saved Successfully!')
+            except IntegrityError:
+			inventory_record = Product.get(product_name = product_name)
+			inventory_record = Prodcut.get(product_price = product_name)
+			inventory_record = Product.get(product_quantity = product_name)
+			inventory_record = Product.get(date_updated = product_name)
+			inventory_record.save()
 
 
 def backup_database():
