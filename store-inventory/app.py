@@ -126,6 +126,7 @@ def add_entries():
             Product.create(product_name=product_name,
             product_price=product_price,
             product_quantity=product_quantity)
+            print('Saved Successfully!')
 
 
 
