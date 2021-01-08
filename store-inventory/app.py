@@ -129,12 +129,17 @@ def add_entries():
             print('Saved Successfully!')
 
 
-
-
-
-
 def backup_database():
 	""" Backup Database """
+    with open('backup.csv', 'a') as backup_csv:
+        fields = ['product_id', 'product_name', 'product_price', 'product_quantity', 'date_updated']
+        backup_writer = csv.DictWriter(backup_csv, fieldnames=fields)
+        
+        backup_writer.writeheader()
+        backup_writer.writerow(rows)
+
+
+
 
 menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
 
