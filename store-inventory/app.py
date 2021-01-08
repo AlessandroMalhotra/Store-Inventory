@@ -71,7 +71,7 @@ def menu():
 		choice = input('Action: ').lower().strip()
 
 		if choice in menu:
-			menu[choice]()
+			options_menu[choice]()
 
 
 def view_entries():
@@ -141,13 +141,13 @@ def backup_database():
 
 
 
-menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
+options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
 
 if __name__ == '__main__':
 	initialize()
 	read_csv()
 	add_to_database(read_csv)
-
+    menu()
 
 
 
