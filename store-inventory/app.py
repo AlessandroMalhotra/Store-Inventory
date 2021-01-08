@@ -5,9 +5,9 @@ import sys
 
 from collections import OrderedDict
 
-from peewee import * 
+from peewee import *
 
-db = sqliteDatabase('inventory.db')
+db = SqliteDatabase('inventory.db')
 
 
 class Product(Model):
@@ -35,22 +35,24 @@ def read_csv():
 		for row in rows:
 			row['product_price'] = int(row['product_price'].replace('$', '').replace('.', ''))
 			row['product_quantity'] = int(row['product_quantity'])
-			row['date_updated'] = datetime.datetime.strptime(row['date_updated'],'%Y-%m-%d')
+			row['date_updated'] = datetime.datetime.strptime(row['date_updated'],'%m/%d/%Y')
 
 			
 def add_to_database(read_csv):
-	try:
-		Product.create(product_name = row['product_name'],
+	
+	for row in rows:
+		try:
+			Product.create(product_name = row['product_name'],
 				product_price = row['product_price'],
 				product_quantity = row['product_quantity'],
 				date_updated = row['date_updated'])
 
-	except IntegrityErorr:
-		inventory_record = Product.get(product_name = row['product_name'])
-		inventory_record = Prodcut.get(product_price = row['product_price'])
-		inventory_record = Product.get(product_quantity = row['product_quantity'])
-		inventory_record = Product.get(date_updated = row['date_uodated'])
-		inventory_record.save()
+		except IntegrityError:
+			inventory_record = Product.get(product_name = row['product_name'])
+			inventory_record = Prodcut.get(product_price = row['product_price'])
+			inventory_record = Product.get(product_quantity = row['product_quantity'])
+			inventory_record = Product.get(date_updated = row['date_uodated'])
+			inventory_record.save()
 
 
 def Menu():
@@ -104,7 +106,7 @@ def view_entries():
 
 
 
-def add_entry():
+def add_entries():
 	""" Add Entry """
 	# a new variable which will equal to none
 	# while loop to say while variable not equal q, print enter q to quit 
@@ -114,7 +116,7 @@ def add_entry():
 	# add this to our database .create() with add_data function
 	active = True
 
-	if active:
+	while active:
 		product_name = input('What is the name of your product?\n ')
 		product_price = input('What is the price of your prodcut?\n ')
 		product_quantity = input('What is the quantity of your product?\n ')
@@ -127,17 +129,12 @@ def add_entry():
 def backup_database():
 	""" Backup Database """
 
-
-
-
-
 menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
 
 if __name__ == '__main__':
 	initialize()
 	read_csv()
-	add_to_database()
-
+	add_to_database(read_csv)
 
 
 
