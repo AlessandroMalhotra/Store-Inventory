@@ -121,13 +121,9 @@ def get_product_quantity():
 
 def add_entries():
 	""" Add Entry """
-	# product_name = input product name 
-	# product price = input product price show example of format, we need to change $2.99 to 299
-	# product quantity = input the product quantity
-	# add this to our database .create() with add_data function
-	    product_name = get_product_name()
-		product_price = get_product_price()
-		product_quantity = get_product_quantity()
+    product_name = get_product_name()
+    product_price = get_product_price()
+    product_quantity = get_product_quantity()
 
         saved = input('Save entry? [Yn] ').lower()
 
