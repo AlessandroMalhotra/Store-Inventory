@@ -55,7 +55,7 @@ def add_to_database(read_csv):
 			inventory_record.save()
 
 
-def Menu():
+def menu():
 	# this will prompt the user for a action, with only v a and b being acceptable inputs
 	# if the user selects v, view the details of a single product in the database
 	# if the user selects a, this will add a new product to the database
