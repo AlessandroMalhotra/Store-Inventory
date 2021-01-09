@@ -39,13 +39,12 @@ def read_csv():
 
 
 def add_to_database():
-	
-	for row in inventory:
-		try:
+    for row in inventory:
+        try:
             Product.create(product_name = row['product_name'],
-				product_price = row['product_price'],
-				product_quantity = row['product_quantity'],
-				date_updated = row['date_updated'])
+            product_price = row['product_price'],
+            product_quantity = row['product_quantity'],
+            date_updated = row['date_updated'])
 
 		except IntegrityError:
 			inventory_record = Product.get(product_name = row['product_name'])
