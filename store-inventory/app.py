@@ -56,15 +56,10 @@ def add_to_database():
 
 
 def menu():
-	# this will prompt the user for a action, with only v a and b being acceptable inputs
-	# if the user selects v, view the details of a single product in the database
-	# if the user selects a, this will add a new product to the database
-	# if the user selects b, this will backup the database 
-
 	choice = None
 
 	while choice != 'q':
-		print("Enter 'q' to quit")
+        print("Enter 'q' to quit")
 
 		for key, value in menu.items():
 			print(f'{key}, {value.__doc__}.')
@@ -76,10 +71,6 @@ def menu():
 
 def view_entries():
 	""" View Entries """
-	# dispaly the products from the database
-	# will want to show latest to oldest first
-	# get and display a product by its product id
-
 	products = Product.select().order_by(Product.date_ordered.desc())
 
 	search_query = input('Search query: ')
@@ -115,9 +106,11 @@ def get_product_price():
     new_price = int(new_price.replace('$', '').replace('.', ''))
     return new_price
 
+
 def get_product_quantity():
     new_quantity = input('What is the quantity of your product?\n ')
     return new_quantity
+
 
 def add_entries():
     """ Add Entry """
@@ -142,13 +135,20 @@ def add_entries():
 
 
 def backup_database():
-	""" Backup Database """
+    """ Backup Database """
     with open('backup.csv', 'a') as backup_csv:
         fields = ['product_id', 'product_name', 'product_price', 'product_quantity', 'date_updated']
         backup_writer = csv.DictWriter(backup_csv, fieldnames=fields)
         
         backup_writer.writeheader()
-        backup_writer.writerow(inventory)
+        for row in Product.select().order_by(Product.date_ordered.desc()):
+            backup_writer.writerow({'product_id': row.product_id})
+            backup_writer.writerow({'product_name': row.product_name})
+            backup_writer.writerow({'product_price': row.product_price})
+            backup_writer.writerow({'product_quantity': row.product_quantity})
+            backup_writet.writerow({'date_updated': row.date_updated})
+        print('Backup successfully completed.')
+        menu()
 
 
 options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
