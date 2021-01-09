@@ -27,7 +27,7 @@ def initialize():
 
 inventory = []
 
-def read_csv():
+def read_csv(inventory):
     with open('inventory.csv', newline='') as inventory_csv:
         inventory_reader = csv.DictReader(inventory_csv, delimiter=',')
         
@@ -70,7 +70,7 @@ def menu():
 
 def view_entries():
 	""" View Entries """
-	products = Product.select().order_by(Product.date_ordered.desc())
+	products = Product.select().order_by(Product.product_id.desc())
 
 	search_query = input('Search query: ')
 
@@ -154,8 +154,8 @@ options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backu
 
 if __name__ == '__main__':
 	initialize()
-	read_csv()
-	add_to_database()
+	read_csv(inventory)
+	add_to_database(inventory)
     menu()
 
 
