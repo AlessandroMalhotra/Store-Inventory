@@ -38,7 +38,7 @@ def read_csv():
         inventory.append(row)
 
 
-def add_to_database():
+def add_to_database(inventory):
     for row in inventory:
         try:
             Product.create(product_name = row['product_name'],
