@@ -37,12 +37,12 @@ def read_csv():
             row['date_updated'] = datetime.datetime.strptime(row['date_updated'],'%m/%d/%Y')
         inventory.append(row)
 
-		
+
 def add_to_database():
 	
 	for row in inventory:
 		try:
-			Product.create(product_name = row['product_name'],
+            Product.create(product_name = row['product_name'],
 				product_price = row['product_price'],
 				product_quantity = row['product_quantity'],
 				date_updated = row['date_updated'])
@@ -148,7 +148,7 @@ def backup_database():
         backup_writer = csv.DictWriter(backup_csv, fieldnames=fields)
         
         backup_writer.writeheader()
-        backup_writer.writerow(rows)
+        backup_writer.writerow(inventory)
 
 
 options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
