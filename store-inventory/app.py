@@ -25,22 +25,22 @@ def initialize():
 	db.connect()
 	db.create_tables([Product], safe=True)
 
+inventory = []
 
 def read_csv():
-	
-	with open('inventory.csv', newline='') as inventory_csv:
-		inventory_reader = csv.DictReader(inventory_csv, delimiter=',')
-		rows = list(inventory_reader)
+    with open('inventory.csv', newline='') as inventory_csv:
+        inventory_reader = csv.DictReader(inventory_csv, delimiter=',')
+        
+        for row in inventry_reader:
+            row['product_price'] = int(row['product_price'].replace('$', '').replace('.', ''))
+            row['product_quantity'] = int(row['product_quantity'])
+            row['date_updated'] = datetime.datetime.strptime(row['date_updated'],'%m/%d/%Y')
+        inventory.append(row)
 
-		for row in rows:
-			row['product_price'] = int(row['product_price'].replace('$', '').replace('.', ''))
-			row['product_quantity'] = int(row['product_quantity'])
-			row['date_updated'] = datetime.datetime.strptime(row['date_updated'],'%m/%d/%Y')
-
-			
-def add_to_database(read_csv):
+		
+def add_to_database():
 	
-	for row in rows:
+	for row in inventory:
 		try:
 			Product.create(product_name = row['product_name'],
 				product_price = row['product_price'],
@@ -120,25 +120,25 @@ def get_product_quantity():
     return new_quantity
 
 def add_entries():
-	""" Add Entry """
+    """ Add Entry """
     product_name = get_product_name()
     product_price = get_product_price()
     product_quantity = get_product_quantity()
+    
+    saved = input('Save entry? [Yn] ').lower()
 
-        saved = input('Save entry? [Yn] ').lower()
-
-        if saved != 'n':
-            try:
-                Product.create(product_name = product_name,
-                product_price = product_price,
-                product_quantity = product_quantity)
-                print('Saved Successfully!')
-            except IntegrityError:
-			inventory_record = Product.get(product_name = product_name)
-			inventory_record = Prodcut.get(product_price = product_name)
-			inventory_record = Product.get(product_quantity = product_name)
-			inventory_record = Product.get(date_updated = product_name)
-			inventory_record.save()
+    if saved != 'n':
+        try:
+            Product.create(product_name = product_name,
+            product_price = product_price,
+            product_quantity = product_quantity)
+            print('Saved Successfully!')
+        except IntegrityError:
+            inventory_record = Product.get(product_name = product_name)
+            inventory_record = Prodcut.get(product_price = product_name)
+            inventory_record = Product.get(product_quantity = product_name)
+            inventory_record = Product.get(date_updated = product_name)
+            inventory_record.save()
 
 
 def backup_database():
@@ -151,14 +151,12 @@ def backup_database():
         backup_writer.writerow(rows)
 
 
-
-
 options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
 
 if __name__ == '__main__':
 	initialize()
 	read_csv()
-	add_to_database(read_csv)
+	add_to_database()
     menu()
 
 
