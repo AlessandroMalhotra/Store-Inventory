@@ -2,6 +2,7 @@
 import csv
 import datetime
 import sys
+import os
 
 from collections import OrderedDict
 
@@ -9,6 +10,7 @@ from peewee import *
 
 db = SqliteDatabase('inventory.db')
 
+inventory = []
 
 class Product(Model):
 	product_id = AutoField()
@@ -25,7 +27,10 @@ def initialize():
 	db.connect()
 	db.create_tables([Product], safe=True)
 
-inventory = []
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def read_csv():
     with open('inventory.csv', newline='') as inventory_csv:
@@ -58,6 +63,7 @@ def menu():
     choice = None
     
     while choice != 'q':
+        clear()
         print("Enter 'q' to quit")
         
         for key, value in options_menu.items():
@@ -65,6 +71,7 @@ def menu():
         choice = input('Action: ').lower().strip()
         
         if choice in options_menu:
+            clear()
             options_menu[choice]()
 
 
@@ -78,11 +85,13 @@ def view_entries(search_query=None):
 		products = products.where(Product.product_id.contains(search_query))
 
 	for product in products:
-		print(product.product_id)
+		clear()
+        print(product.product_id)
 		print(product.product_name)
 		print(product.product_price)
 		print(product.product_quantity)
 		print(product.date_updated)
+        print('\n\n')
 		print('n) next entry')
 		print('r) return to main menu')
 		print('q) quit')
