@@ -27,11 +27,11 @@ def initialize():
 
 inventory = []
 
-def read_csv(inventory):
+def read_csv():
     with open('inventory.csv', newline='') as inventory_csv:
         inventory_reader = csv.DictReader(inventory_csv, delimiter=',')
-        
-        for row in inventry_reader:
+        rows = inventory_reader
+        for row in inventory_reader:
             row['product_price'] = int(row['product_price'].replace('$', '').replace('.', ''))
             row['product_quantity'] = int(row['product_quantity'])
             row['date_updated'] = datetime.datetime.strptime(row['date_updated'],'%m/%d/%Y')
@@ -45,43 +45,43 @@ def add_to_database(inventory):
             product_price = row['product_price'],
             product_quantity = row['product_quantity'],
             date_updated = row['date_updated'])
-
-		except IntegrityError:
-			inventory_record = Product.get(product_name = row['product_name'])
-			inventory_record = Prodcut.get(product_price = row['product_price'])
-			inventory_record = Product.get(product_quantity = row['product_quantity'])
-			inventory_record = Product.get(date_updated = row['date_uodated'])
-			inventory_record.save()
+            
+        except IntegrityError:
+            inventory_record = Product.get(product_name = row['product_name'])
+            inventory_record = Product.get(product_price = row['product_price'])
+            inventory_record = Product.get(product_quantity = row['product_quantity'])
+            inventory_record = Product.get(date_updated = row['date_updated'])
+            inventory_record.save()
 
 
 def menu():
-	choice = None
-
-	while choice != 'q':
+    choice = None
+    
+    while choice != 'q':
         print("Enter 'q' to quit")
+        
+        for key, value in options_menu.items():
+            print(f'{key}, {value.__doc__}.')
+        choice = input('Action: ').lower().strip()
+        
+        if choice in options_menu:
+            options_menu[choice]()
 
-		for key, value in menu.items():
-			print(f'{key}, {value.__doc__}.')
-		choice = input('Action: ').lower().strip()
 
-		if choice in menu:
-			options_menu[choice]()
-
-
-def view_entries():
+def view_entries(search_query=None):
 	""" View Entries """
 	products = Product.select().order_by(Product.product_id.desc())
 
 	search_query = input('Search query: ')
 
 	if search_query:
-		products = products.where(Prodcut.product_id.contains(search_query))
+		products = products.where(Product.product_id.contains(search_query))
 
 	for product in products:
 		print(product.product_id)
 		print(product.product_name)
-		print(product.price)
-		print(product.quantity)
+		print(product.product_price)
+		print(product.product_quantity)
 		print(product.date_updated)
 		print('n) next entry')
 		print('r) return to main menu')
@@ -89,7 +89,7 @@ def view_entries():
 
 		next_action = input('Action: [nrd] '.lower().strip())
 		if next_action == 'r':
-			Menu()
+			menu()
 		elif next_action == 'q':
 			break
 			print('Thank you! goodbye.')
@@ -153,9 +153,9 @@ def backup_database():
 options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
 
 if __name__ == '__main__':
-	initialize()
-	read_csv(inventory)
-	add_to_database(inventory)
+    initialize()
+    read_csv()
+    add_to_database(inventory)
     menu()
 
 
