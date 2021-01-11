@@ -76,32 +76,32 @@ def menu():
 
 
 def view_entries(search_query=None):
-	""" View Entries """
-	products = Product.select().order_by(Product.product_id.desc())
+    """ View Entries """
+    products = Product.select().order_by(Product.product_id.desc())
 
-	search_query = input('Search query: ')
+    search_query = input('Search query: ')
 
-	if search_query:
-		products = products.where(Product.product_id.contains(search_query))
+    if search_query:
+        products = products.where(Product.product_id.contains(search_query))
 
-	for product in products:
-		clear()
+    for product in products:
+        clear()
         print(product.product_id)
-		print(product.product_name)
-		print(product.product_price)
-		print(product.product_quantity)
-		print(product.date_updated)
+        print(product.product_name)
+        print(product.product_price)
+        print(product.product_quantity)
+        print(product.date_updated)
         print('\n\n')
-		print('n) next entry')
-		print('r) return to main menu')
-		print('q) quit')
+        print('n) next entry')
+        print('r) return to main menu')
+        print('q) quit')
 
-		next_action = input('Action: [nrd] '.lower().strip())
-		if next_action == 'r':
-			menu()
-		elif next_action == 'q':
-			break
-			print('Thank you! goodbye.')
+        next_action = input('Action: [nrd] '.lower().strip())
+        if next_action == 'r':
+            menu()
+        elif next_action == 'q':
+            break
+            print('Thank you! goodbye.')
 
 
 def get_product_name():
