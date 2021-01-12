@@ -166,6 +166,6 @@ if __name__ == '__main__':
     read_csv()
     add_to_database(inventory)
     menu()
-
+    #peewee get by id google this 
 
 
