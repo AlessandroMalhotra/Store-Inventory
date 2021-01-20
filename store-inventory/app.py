@@ -82,7 +82,7 @@ def view_entries(search_query=None):
     search_query = input('Search query: ')
 
     if search_query:
-        products = products.where(Product.product_id.contains(search_query))
+        products = products.where(Product.product_id==search_query)
 
     for product in products:
         clear()
@@ -92,11 +92,10 @@ def view_entries(search_query=None):
         print(product.product_quantity)
         print(product.date_updated)
         print('\n\n')
-        print('n) next entry')
         print('r) return to main menu')
         print('q) quit')
 
-        next_action = input('Action: [nrd] '.lower().strip())
+        next_action = input('Action: [rd]  '.lower())
         if next_action == 'r':
             menu()
         elif next_action == 'q':
@@ -140,7 +139,7 @@ def add_entries():
             inventory_record = Product.get(product_quantity = product_name)
             inventory_record = Product.get(date_updated = product_name)
             inventory_record.save()
-
+            print('Saved Successfully!')
 
 def backup_database():
     """ Backup Database """
@@ -149,12 +148,12 @@ def backup_database():
         backup_writer = csv.DictWriter(backup_csv, fieldnames=fields)
         
         backup_writer.writeheader()
-        for row in Product.select().order_by(Product.date_ordered.desc()):
+        for row in Product.select().order_by(Product.date_updated.desc()):
             backup_writer.writerow({'product_id': row.product_id})
             backup_writer.writerow({'product_name': row.product_name})
             backup_writer.writerow({'product_price': row.product_price})
             backup_writer.writerow({'product_quantity': row.product_quantity})
-            backup_writet.writerow({'date_updated': row.date_updated})
+            backup_writer.writerow({'date_updated': row.date_updated})
         print('Backup successfully completed.')
         menu()
 
@@ -166,6 +165,5 @@ if __name__ == '__main__':
     read_csv()
     add_to_database(inventory)
     menu()
-    #peewee get by id google this 
 
 
