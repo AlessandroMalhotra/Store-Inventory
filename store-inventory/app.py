@@ -107,7 +107,6 @@ def view_entries(search_query=None):
                 clear()
             
 
-
 def get_product_name():
     add = Product()
     while True:
@@ -154,8 +153,6 @@ def add_entries():
     new_price = get_product_price()
     new_quantity = get_product_quantity()
 
-  
-    
     saved = input('Save entry? [Yn] ').lower()
 
     if saved != 'n':
@@ -171,6 +168,7 @@ def add_entries():
             new_record.save()
             print('Saved Successfully!')
 
+
 def backup_database():
     """ Backup Database """
     backup_file = 'Inventory_Backup.csv'
@@ -181,10 +179,10 @@ def backup_database():
         products = Product.select()
         for product in products:
             backup_writer.writerow({
-                'product_name': row.product_name,
-                'product_price': row.product_price,
-                'product_quantity': row.product_quantity,
-                'date_updated': row.date_updated,
+                'product_name': product.product_name,
+                'product_price': product.product_price,
+                'product_quantity': product.product_quantity,
+                'date_updated': product.date_updated,
             })
     if os.path.isfile(backup_file):
         clear()
@@ -195,6 +193,7 @@ def backup_database():
 
 
 options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
+
 
 if __name__ == '__main__':
     initialize()
