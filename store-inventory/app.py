@@ -40,21 +40,21 @@ def read_csv():
             row['product_price'] = int(row['product_price'].replace('$', '').replace('.', ''))
             row['product_quantity'] = int(row['product_quantity'])
             row['date_updated'] = (datetime.datetime.strptime(row['date_updated'],'%m/%d/%Y').date())
-        try:
-            Product.create(
-            product_name = row['product_name'],
-            product_price = row['product_price'],
-            product_quantity = row['product_quantity'],
-            date_updated = row['date_updated'],
-            ).save()
+            try:
+                Product.create(
+                product_name = row['product_name'],
+                product_price = row['product_price'],
+                product_quantity = row['product_quantity'],
+                date_updated = row['date_updated'],
+                ).save()
             
-        except IntegrityError:
-            inventory_record = Product.get(product_name = row['product_name'])
-            inventory_record.product_name = row['product_name']
-            inventory_record.product_price = row['product_price']
-            inventory_record.product_quantity = row['product_quantity']
-            inventory_record.date_updated = row['date_updated']
-            inventory_record.save()
+            except IntegrityError:
+                inventory_record = Product.get(product_name = row['product_name'])
+                inventory_record.product_name = row['product_name']
+                inventory_record.product_price = row['product_price']
+                inventory_record.product_quantity = row['product_quantity']
+                inventory_record.date_updated = row['date_updated']
+                inventory_record.save()
 
 
 def menu():
@@ -78,33 +78,40 @@ def menu():
             clear()
             options_menu[choice]()
 
+def view_individual_entries():
+     """View Entries By ID """
+     while True:
+        try:
+            search_query = view_entries(int(input('Search by ID: ')))
+            if search_query != Product.product_id:
+                raise ValueError
+            break
+        except ValueError:
+            print('That is not a valid value.')
+            break
+
 
 def view_entries(search_query=None):
     """ View Entries """
     products = Product.select().order_by(Product.product_id.desc())
-    try:
-        search_query = input('Search by ID: ')
-    except ValueError:
-        print('That is not a valid value.')
-    else:
-        if search_query:
-            products = Product.select().where(Product.product_id==search_query)
+    if search_query:
+        products = Product.select().where(Product.product_id==search_query)
 
-        for product in products:
+    for product in products:
+        clear()
+        print(product.product_id)
+        print(product.product_name)
+        print(f'${product.product_price/100}')
+        print(product.product_quantity)
+        print(f'Date: {product.date_updated.strftime("%m/%d/%Y")}')
+        print('\n\n')
+        print('r) return to main menu')
+        print('n) next entry')
+        next_action = input('Action: [r/n]  '.lower())
+        if next_action == 'r':
+            break
+        elif next_action == 'n':
             clear()
-            print(product.product_id)
-            print(product.product_name)
-            print(product.product_price)
-            print(product.product_quantity)
-            print(product.date_updated)
-            print('\n\n')
-            print('r) return to main menu')
-            print('n) next entry')
-            next_action = input('Action: [r/n]  '.lower())
-            if next_action == 'r':
-                break
-            elif next_action == 'n':
-                clear()
             
 
 def get_product_name():
@@ -157,15 +164,21 @@ def add_entries():
 
     if saved != 'n':
         try:
-            Product.create(product_name = new_product,
-            product_price = new_price,
-            product_quantity = new_quantity)
+            Product.create(
+                product_name = new_product,
+                product_price = new_price,
+                product_quantity = new_quantity,
+                date_updated = datetime.datetime.now().date(),
+            ).save()
+            clear()
             print('Saved Successfully!')
         except IntegrityError:
-            new_record = Product.get(Product.product_name == add.new_product)
-            new_record.product_price = add.new_price
-            new_record.product_quantity = add.new_quantity
+            new_record = Product.get(Product.product_name == new_product)
+            new_record.product_price = new_price
+            new_record.product_quantity = new_quantity
+            new_record.date_updated = date_updated
             new_record.save()
+            clear()
             print('Saved Successfully!')
 
 
@@ -192,7 +205,7 @@ def backup_database():
         print('Something went wrong, Please try again.')
 
 
-options_menu = OrderedDict([('v', view_entries), ('a', add_entries), ('b', backup_database)])
+options_menu = OrderedDict([('v', view_entries), ('vi', view_individual_entries), ('a', add_entries), ('b', backup_database)])
 
 
 if __name__ == '__main__':
