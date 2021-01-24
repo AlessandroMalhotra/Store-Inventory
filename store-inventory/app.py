@@ -79,7 +79,7 @@ def menu():
             options_menu[choice]()
 
 def view_individual_entries():
-     """View Entries By ID """
+     """ View Entries """
      while True:
         try:
             search_query = view_entries(int(input('Search by ID: ')))
@@ -176,7 +176,7 @@ def add_entries():
             new_record = Product.get(Product.product_name == new_product)
             new_record.product_price = new_price
             new_record.product_quantity = new_quantity
-            new_record.date_updated = date_updated
+            new_record.date_updated = datetime.datetime.now().date()
             new_record.save()
             clear()
             print('Saved Successfully!')
@@ -184,7 +184,7 @@ def add_entries():
 
 def backup_database():
     """ Backup Database """
-    backup_file = 'Inventory_Backup.csv'
+    backup_file = 'Backup.csv'
     with open(backup_file, 'a', newline='') as backup_csv:
         fields = ['product_name', 'product_price', 'product_quantity', 'date_updated']
         backup_writer = csv.DictWriter(backup_csv, fieldnames=fields)
@@ -205,7 +205,7 @@ def backup_database():
         print('Something went wrong, Please try again.')
 
 
-options_menu = OrderedDict([('v', view_entries), ('vi', view_individual_entries), ('a', add_entries), ('b', backup_database)])
+options_menu = OrderedDict([('v', view_individual_entries), ('a', add_entries), ('b', backup_database)])
 
 
 if __name__ == '__main__':
