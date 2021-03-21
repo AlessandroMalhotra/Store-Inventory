@@ -11,6 +11,7 @@ from peewee import *
 db = SqliteDatabase('inventory.db')
 
 
+# Create Database with columns for product information
 class Product(Model):
 	product_id = AutoField()
 	product_name = CharField(unique=True)
@@ -21,7 +22,7 @@ class Product(Model):
 	class Meta():
 		database = db
 
-
+# Initialize database and create tables 
 def initialize():
     db.connect()
     db.create_tables([Product], safe=True)
@@ -32,6 +33,7 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+# Reads in the csv file turns into a dictionary and update values in 3 columns and then adds them to database
 def read_csv():
     with open('inventory.csv', newline='') as inventory_csv:
         inventory_reader = csv.DictReader(inventory_csv, delimiter=',')
@@ -57,6 +59,7 @@ def read_csv():
                 inventory_record.save()
 
 
+# Displays menu with three choices : view individual entries, add entry and backup database
 def menu():
     choice = None
     
@@ -78,6 +81,8 @@ def menu():
             clear()
             options_menu[choice]()
 
+
+# Prompts the user for an id and then searches the database for the product with that id 
 def view_individual_entries():
      """ View Entries """
      while True:
@@ -91,6 +96,8 @@ def view_individual_entries():
             break
 
 
+# If user searches then displays te product info for that id,
+# else displays all products in the database
 def view_entries(search_query=None):
     """ View Entries """
     products = Product.select().order_by(Product.product_id.desc())
@@ -112,8 +119,9 @@ def view_entries(search_query=None):
             break
         elif next_action == 'n':
             clear()
-            
+ 
 
+# If user selects add new entry prompts user for name of the product 
 def get_product_name():
     add = Product()
     while True:
@@ -127,6 +135,7 @@ def get_product_name():
     return add.new_product
 
 
+# Prompts the user for new product price 
 def get_product_price():
     add = Product()
     while True:
@@ -141,6 +150,7 @@ def get_product_price():
     return add.new_price
 
 
+# Prompts the user for new product quantity
 def get_product_quantity():
     add = Product()
     while True:
@@ -154,6 +164,8 @@ def get_product_quantity():
     return add.new_quantity
 
 
+# Checks to see if new entry not in database if not adds the product,
+# If entry already in the database then it updates existing entry
 def add_entries():
     """ Add Entry """
     new_product = get_product_name()
@@ -182,6 +194,7 @@ def add_entries():
             print('Saved Successfully!')
 
 
+# Backups the database
 def backup_database():
     """ Backup Database """
     backup_file = 'Backup.csv'
